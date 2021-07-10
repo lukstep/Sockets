@@ -11,8 +11,8 @@ print("Client port:{0}".format(args.port))
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     print("Socket created")
     s.connect((HOST, args.port))
-    while True:
-        a = input()
-        s.send(a.encode('ascii'))
-        data = s.recv(1025)
-        print(data.decode('ascii'))
+    for i in range(10):
+        message = "packet {}".format(i)
+        s.send(message.encode())
+        # data = s.recv(1025)
+        # print(data)

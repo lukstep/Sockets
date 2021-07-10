@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import socket
 import argparse
+import socketserver
 
 HOST = '0.0.0.0'  
 
@@ -10,15 +11,12 @@ args = parser.parse_args()
 
 print("Server port:{0}".format(args.port))
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, args.port))
-    s.listen()
-    conn, addr = s.accept()
-    with conn:
-        print('Connected by', addr)
-        while True:
-            data = conn.recv(1024)
-            print(data.decode('ascii'))
-            if not data:
-                break
-            conn.sendall(data)
+class TCPHanndler(socketserver.BaseRequestHandler):
+    def handle(self) -> None:
+        self.data = self.request.recv(1024).strip()
+        print("{} wrote".format(self.client_address[0]))
+        print(self.data)
+        # self.request.sendall(self.data.upper())
+
+with socketserver.TCPServer((HOST, args.port), TCPHanndler) as server:
+    server.serve_forever()
