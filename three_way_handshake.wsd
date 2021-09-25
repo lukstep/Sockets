@@ -1,0 +1,16 @@
+@startuml
+
+participant Client
+participant Server
+hnote over Server: LISTEN
+Client -> Server : [SYN] Seq: 0
+hnote left: SYN-SENT
+
+Server -> Client : [SYN, ACK] Seq: 0, ACK seq:1
+hnote right: SYN-RECEIVED
+
+
+hnote over Client: ESTABLISHED
+Client -> Server : [ACK] Seq: 1 ACK seq:1
+hnote over Server: ESTABLISHED
+@enduml
